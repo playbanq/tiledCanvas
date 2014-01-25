@@ -25,19 +25,19 @@ function tiledCanvas(canvas, tileSize) {
         grid: {
             value: {  
                 tileSize: tileSize,
-                rows: canvas.height/tileSize,
-                columns: canvas.width/tileSize,
+                rows: Math.floor(canvas.height/tileSize),
+                columns: Math.floor(canvas.width/tileSize),
                 draw: function () { 
                     context.lineWidth = 1;
                     context.strokeStyle = '#ccc';
-                    for (var i = 0, y = i * tileSize + 0.5, rows = Math.floor(canvas.height/tileSize); 
+                    for (var i = 0, y = i * tileSize + 0.5, rows = canvas.grid.rows; 
                         i <= rows; i++, y = i * tileSize + 0.5) {
                         // Draw horizontal lines
                         context.beginPath();
                         context.moveTo(0, y);
                         context.lineTo(canvas.width, y);
                         context.stroke();
-                        for (var j = 0, x = j * tileSize + 0.5, columns = Math.floor(canvas.width/tileSize); 
+                        for (var j = 0, x = j * tileSize + 0.5, columns = canvas.grid.columns; 
                             j <= columns; j++, x = j * tileSize + 0.5) {
                             // Draw vertical lines
                             context.beginPath();
@@ -62,8 +62,8 @@ function tiledCanvas(canvas, tileSize) {
                     };
                 },
                 setSize: function (newWidth, newHeight) {
-                    canvas.grid.rows = (newHeight || window.innerWidth)/canvas.grid.tileSize;
-                    canvas.grid.columns = (newWidth || window.innerWidth)/canvas.grid.tileSize;
+                    canvas.grid.rows = Math.floor((newHeight || window.innerWidth)/canvas.grid.tileSize);
+                    canvas.grid.columns = Math.floor((newWidth || window.innerWidth)/canvas.grid.tileSize);
                 }
             }
         },
