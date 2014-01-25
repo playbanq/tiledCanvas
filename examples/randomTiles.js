@@ -6,9 +6,6 @@ canvas.setSize();
 canvas.grid.setSize();
 canvas.grid.draw();
 
-var tileSize = canvas.grid.tileSize;
-context.fillStyle = '#ccc';
-
 for (var row = 0, rows = canvas.grid.rows; row <= rows; row++) {
     for (var col = 0, columns = canvas.grid.columns; col <= columns; col++) {
         if (Math.random() < 0.3) {
@@ -16,5 +13,3 @@ for (var row = 0, rows = canvas.grid.rows; row <= rows; row++) {
         }
     }
 }
-
-

@@ -55,6 +55,12 @@ function tiledCanvas(canvas, tileSize) {
                         context.stroke();
                     }
                 },
+                getTile: function (x, y, offset) {
+                    return {
+                        row: Math.floor(y/canvas.grid.tileSize),
+                        column: Math.floor(x/canvas.grid.tileSize)
+                    };
+                },
                 setSize: function (newWidth, newHeight) {
                     canvas.grid.rows = (newHeight || window.innerWidth)/canvas.grid.tileSize;
                     canvas.grid.columns = (newWidth || window.innerWidth)/canvas.grid.tileSize;
