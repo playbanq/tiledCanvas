@@ -1,4 +1,6 @@
-var canvas = new TiledCanvas('tiledCanvas', window.innerWidth, window.innerHeight, 20);
-canvas.collisionMatrix.create();
+var canvas = document.getElementById('tiledCanvas');
+TiledCanvas.extend(canvas, 20);
+canvas.setSize();
+canvas.collisionMatrix.create(0.2);
 canvas.grid.draw();
 canvas.grid.drawSquares();
