@@ -26,6 +26,8 @@ function tiledCanvas(canvas, tileSize) {
         'grid': {
             value: {  
                 tileSize: tileSize,
+                rows: canvas.height/tileSize,
+                columns: canvas.width/tileSize,
                 draw: function () { 
                     context.lineWidth = 1;
                     context.strokeStyle = '#ccc';
@@ -46,19 +48,12 @@ function tiledCanvas(canvas, tileSize) {
                         }
                     }
                 },
-                drawSquares: function (color) {
-                    context.fillStyle = color || '#ccc';
-                    for (var row = 0, rows = Math.floor(canvas.height/tileSize); 
-                        row <= rows; row++) {
-                        for (var col = 0, columns = Math.floor(canvas.width/tileSize); 
-                            col <= columns; col++) {
-                            if (canvas.collisionMatrix.get()[row][col]) {
-                                // Draw square
-                                context.beginPath();
-                                context.fillRect(col * tileSize + 0.5, row * tileSize + 0.5, tileSize, tileSize);
-                                context.stroke();
-                            }
-                        }
+                drawTile: function (row, column, color) {
+                    if (row <= rows && column <= columns) {
+                        context.fillStyle = color || '#ccc';
+                        context.beginPath();
+                        context.fillRect(col * tileSize + 0.5, row * tileSize + 0.5, tileSize, tileSize);
+                        context.stroke();
                     }
                 }
             }
@@ -117,6 +112,8 @@ function tiledCanvas(canvas, tileSize) {
             value: function (newWidth, newHeight) {
                 canvas.width = newWidth || window.innerWidth;
                 canvas.height = newHeight || window.innerHeight;
+                canvas.grid.rows = canvas.height/canvas.grid.tileSize;
+                canvas.grid.columns = canvas.width/canvas.grid.tileSize;
             }
         }
     }
