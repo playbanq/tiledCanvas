@@ -17,6 +17,7 @@ function tiledCanvas(canvas, tileSize) {
     }
 
     // Check what parameters were specified, or used the default values
+    tileSize = tileSize || canvas.tileSize;
     var tileSize = (typeof tileSize === 'number') ? tileSize : 10,
         context = canvas.getContext('2d');
 
@@ -48,10 +49,11 @@ function tiledCanvas(canvas, tileSize) {
                     }
                 },
                 drawTile: function (row, column, color) {
-                    if (row <= rows && column <= columns) {
+                    if (row <= canvas.grid.rows && column <= canvas.grid.columns) {
+                        var tileSize = canvas.grid.tileSize;
                         context.fillStyle = color || '#ccc';
                         context.beginPath();
-                        context.fillRect(col * tileSize + 0.5, row * tileSize + 0.5, tileSize, tileSize);
+                        context.fillRect(column * tileSize + 1, row * tileSize + 1, tileSize - 1, tileSize - 1);
                         context.stroke();
                     }
                 },
