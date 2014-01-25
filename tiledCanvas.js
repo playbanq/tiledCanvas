@@ -79,8 +79,18 @@ var TiledCanvas = function (id, width, height, tileSize) {
             }
         },
         'drawSquares': {
-            value: function () {
-
+            value: function (color) {
+                context.fillStyle = color || '#aaa';
+                for (var row = 0; row <= rows; i++) {
+                    for (var col = 0; col <= columns; j++) {
+                        if (collisionMatrix[row][col]) {
+                            // Draw square
+                            context.beginPath();
+                            context.fillRect(row * tileSize + 0.5, col * tileSize + 0.5, tileSize, tileSize);
+                            context.stroke();
+                        }
+                    }
+                }
             }
         },
         'setSize': {
