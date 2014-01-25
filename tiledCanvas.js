@@ -18,12 +18,11 @@ function tiledCanvas(canvas, tileSize) {
 
     // Check what parameters were specified, or used the default values
     var tileSize = (typeof tileSize === 'number') ? tileSize : 10,
-        context = canvas.getContext('2d'),
-        collisionMatrix = [];
+        context = canvas.getContext('2d');
 
     // Define the canvas object interface
     var properties = {
-        'grid': {
+        grid: {
             value: {  
                 tileSize: tileSize,
                 rows: canvas.height/tileSize,
@@ -55,65 +54,18 @@ function tiledCanvas(canvas, tileSize) {
                         context.fillRect(col * tileSize + 0.5, row * tileSize + 0.5, tileSize, tileSize);
                         context.stroke();
                     }
+                },
+                setSize: function (newWidth, newHeight) {
+                    canvas.grid.rows = (newHeight || window.innerWidth)/canvas.grid.tileSize;
+                    canvas.grid.columns = (newWidth || window.innerWidth)/canvas.grid.tileSize;
                 }
             }
         },
-        'collisionMatrix': {
-            value: {
-                'get': function () {
-                    return collisionMatrix;
-                },
-                'create': function (collisionMap) {
-                    if (typeof collisionMap === 'object') {
-
-                    } else {
-                        // Fill the matrix with false values
-                        for (var row = 0, rows = Math.floor(canvas.height/tileSize); row <= rows; row++) {
-                            collisionMatrix[row] = new Array(columns);
-                            for (var col = 0, columns = Math.floor(canvas.width/tileSize); col <= columns; col++) {
-                                collisionMatrix[row][col] = Math.random() < 
-                                (typeof collisionMap === 'undefined' ? 0 : collisionMap || 0.3);
-                            }
-                        }
-                        return collisionMatrix;
-                    }
-                },
-                'setValue': function (row, column) {
-                    if (row <= rows && column <= columns) {
-                        collisionMatrix[row][column] = true;
-                    }
-                },
-                'getValue': function (row, column) {
-                    if (row <= rows && column <= columns) {
-                        return collisionMatrix[row][column];
-                    }
-                },
-                'check': function (x, y) {
-                    var row = Math.floor(y/tileSize),
-                        column = Math.floor(x/tileSize);
-
-                    return {
-                        top: row * tileSize,
-                        left: column * tileSize,
-                        size: tileSize,
-                        row: row,
-                        column: column,
-                        collision: canvas.collisionMatrix.get()[row][column]
-                    };
-                },
-                'toggle': function (row, column) {
-                    var matrix = canvas.collisionMatrix.get();
-                    matrix[row][column] = !matrix[row][column];
-                }
-            }
-        },
-        'setSize': {
+        setSize: {
             writable: true,
             value: function (newWidth, newHeight) {
                 canvas.width = newWidth || window.innerWidth;
                 canvas.height = newHeight || window.innerHeight;
-                canvas.grid.rows = canvas.height/canvas.grid.tileSize;
-                canvas.grid.columns = canvas.width/canvas.grid.tileSize;
             }
         }
     }
