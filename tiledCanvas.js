@@ -20,7 +20,8 @@ var TiledCanvas = function (id, width, height, tileSize) {
         tileSize = (typeof tileSize === 'number') ? tileSize : 10,
         rows = Math.floor(height/tileSize),
         columns = Math.floor(width/tileSize),
-        context = canvas.getContext('2d');
+        context = canvas.getContext('2d'),
+        collisionMatrix;
 
     // Set the canvas width and height
     canvas.width = width;
@@ -32,13 +33,29 @@ var TiledCanvas = function (id, width, height, tileSize) {
             value: {  
                 tileSize: tileSize,
                 rows: rows,
-                columns: columns,
-                collisionMatrix: (function () {
-                    // Fill the matrix with false values
-                    var matrixRows = Array.apply(null, new Array(rows)).map(Boolean.prototype.valueOf, false);
-                    var matrix = Array.apply(null, new Array(columns)).map(Array.prototype.valueOf, matrixRows);
-                    return matrix;
-                })()
+                columns: columns 
+            }
+        },
+        'collisionMatrix': {
+            value: {
+                'get': function () {
+                    return collisionMatrix;
+                },
+                'create': function (collisionMap) {
+                    if (collisionMap) {
+
+                    } else {
+                        // Fill the matrix with false values
+                        var matrixRows = Array.apply(null, new Array(rows)).map(Boolean.prototype.valueOf, false);
+                        collisionMatrix = Array.apply(null, new Array(columns)).map(Array.prototype.valueOf, matrixRows);
+                        collisionMatrix;
+                    }
+                },
+                'setValue': function (row, column, value) {
+                    if (row <= rows && column <= columns) {
+                        collisionMatrix[row][column] = (typeof value === 'boolean') ? value : false;
+                    }
+                }
             }
         },
         'drawGrid': {
@@ -61,6 +78,11 @@ var TiledCanvas = function (id, width, height, tileSize) {
                 }
             }
         },
+        'drawSquares': {
+            value: function () {
+
+            }
+        },
         'setSize': {
             value: function (newWidth, newHeight) {
                 width = newWidth;
@@ -68,8 +90,7 @@ var TiledCanvas = function (id, width, height, tileSize) {
                 canvas.width = newWidth;
                 canvas.height = newHeight;
             }
-        },
-
+        }
     }
 
     canvas = Object.create({}, properties);
