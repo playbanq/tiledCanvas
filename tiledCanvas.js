@@ -1,7 +1,7 @@
-/** Creates a tile-based grid and associates it to a canvas element
- * @param {string} id - The ID attribute of an existing canvas element
- * @param {number} width - The desired initial width of the element
- * @param {number} height - The desired initial height of the element
+/** Creates a tile-based grid and extends a canvas element with the related methods
+ * @param {object} canvas - The canvas element object obtained from document.getElementById
+ * @param {number} tileSize - The size of the tiles of the grid
+ * @returns {object} - An object containing the methods used to extend the initial canvas object
  */
 var TiledCanvas = Object.create({}, {
     'extend': {
@@ -12,7 +12,7 @@ var TiledCanvas = Object.create({}, {
 function tiledCanvas(canvas, tileSize) {
     // Validate that the canvas parameter is indeed an existing canvas element
     if (canvas.nodeName !== 'CANVAS') {
-        console.log('ERROR: The element with id ' + id + ' is not a canvas element.');
+        console.log('ERROR: The element provided is not a canvas element.');
         return;
     }
 
@@ -20,10 +20,6 @@ function tiledCanvas(canvas, tileSize) {
     var tileSize = (typeof tileSize === 'number') ? tileSize : 10,
         context = canvas.getContext('2d'),
         collisionMatrix = [];
-
-    // // Set the canvas width and height
-    // canvas.width = width;
-    // canvas.height = height;
 
     // Define the canvas object interface
     var properties = {
@@ -56,7 +52,7 @@ function tiledCanvas(canvas, tileSize) {
                         row <= rows; row++) {
                         for (var col = 0, columns = Math.floor(canvas.width/tileSize); 
                             col <= columns; col++) {
-                            if (collisionMatrix[row][col]) {
+                            if (canvas.collisionMatrix.get()[row][col]) {
                                 // Draw square
                                 context.beginPath();
                                 context.fillRect(col * tileSize + 0.5, row * tileSize + 0.5, tileSize, tileSize);
@@ -96,20 +92,36 @@ function tiledCanvas(canvas, tileSize) {
                     if (row <= rows && column <= columns) {
                         return collisionMatrix[row][column];
                     }
+                },
+                'check': function (x, y) {
+                    var row = Math.floor(y/tileSize),
+                        column = Math.floor(x/tileSize);
+
+                    return {
+                        top: row * tileSize,
+                        left: column * tileSize,
+                        size: tileSize,
+                        row: row,
+                        column: column,
+                        collision: canvas.collisionMatrix.get()[row][column]
+                    };
+                },
+                'toggle': function (row, column) {
+                    var matrix = canvas.collisionMatrix.get();
+                    matrix[row][column] = !matrix[row][column];
                 }
             }
         },
         'setSize': {
+            writable: true,
             value: function (newWidth, newHeight) {
                 canvas.width = newWidth || window.innerWidth;
                 canvas.height = newHeight || window.innerHeight;
             }
         }
     }
-
-    if (!canvas.extensions) {
-        Object.defineProperties(canvas, properties);
-    }
-
+    
+    Object.defineProperties(canvas, properties);
+    
     return Object.create({}, properties);
 }
