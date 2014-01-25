@@ -73,14 +73,15 @@ var TiledCanvas = function (id, width, height, tileSize) {
                     return collisionMatrix;
                 },
                 'create': function (collisionMap) {
-                    if (collisionMap) {
+                    if (typeof collisionMap === 'object') {
 
                     } else {
                         // Fill the matrix with false values
                         for (var row = 0; row <= rows; row++) {
                             collisionMatrix[row] = new Array(columns);
                             for (var col = 0; col <= columns; col++) {
-                                collisionMatrix[row][col] = Math.random() < 0.3;
+                                collisionMatrix[row][col] = Math.random() < 
+                                (typeof collisionMap === 'undefined' ? 0 : collisionMap || 0.3);
                             }
                         }
                         return collisionMatrix;
@@ -89,6 +90,11 @@ var TiledCanvas = function (id, width, height, tileSize) {
                 'setValue': function (row, column) {
                     if (row <= rows && column <= columns) {
                         collisionMatrix[row][column] = true;
+                    }
+                },
+                'getValue': function (row, column) {
+                    if (row <= rows && column <= columns) {
+                        return collisionMatrix[row][column];
                     }
                 }
             }
