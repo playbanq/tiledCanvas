@@ -21,7 +21,7 @@ var TiledCanvas = function (id, width, height, tileSize) {
         rows = Math.floor(height/tileSize),
         columns = Math.floor(width/tileSize),
         context = canvas.getContext('2d'),
-        collisionMatrix;
+        collisionMatrix = [];
 
     // Set the canvas width and height
     canvas.width = width;
@@ -45,15 +45,19 @@ var TiledCanvas = function (id, width, height, tileSize) {
                     if (collisionMap) {
 
                     } else {
-                        // Fill the matrix with false values
-                        var matrixRows = Array.apply(null, new Array(rows)).map(Boolean.prototype.valueOf, false);
-                        collisionMatrix = Array.apply(null, new Array(columns)).map(Array.prototype.valueOf, matrixRows);
-                        collisionMatrix;
+                        // Fill the matrix with false or random values
+                        for (var row = 0; row <= rows; row++) {
+                            collisionMatrix[row] = new Array(columns);
+                            for (var col = 0; col <= columns; col++) {
+                                collisionMatrix[row][col] = false;
+                            }
+                        }
+                        return collisionMatrix;
                     }
                 },
-                'setValue': function (row, column, value) {
+                'setValue': function (row, column) {
                     if (row <= rows && column <= columns) {
-                        collisionMatrix[row][column] = (typeof value === 'boolean') ? value : false;
+                        collisionMatrix[row][column] = true;
                     }
                 }
             }
@@ -80,13 +84,13 @@ var TiledCanvas = function (id, width, height, tileSize) {
         },
         'drawSquares': {
             value: function (color) {
-                context.fillStyle = color || '#aaa';
-                for (var row = 0; row <= rows; i++) {
-                    for (var col = 0; col <= columns; j++) {
+                context.fillStyle = color || '#ccc';
+                for (var row = 0; row <= rows; row++) {
+                    for (var col = 0; col <= columns; col++) {
                         if (collisionMatrix[row][col]) {
                             // Draw square
                             context.beginPath();
-                            context.fillRect(row * tileSize + 0.5, col * tileSize + 0.5, tileSize, tileSize);
+                            context.fillRect(col * tileSize + 0.5, row * tileSize + 0.5, tileSize, tileSize);
                             context.stroke();
                         }
                     }
