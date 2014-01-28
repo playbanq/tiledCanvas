@@ -21,7 +21,7 @@ function tiledCanvas(canvas, tileSize) {
     var tileSize = (typeof tileSize === 'number') ? tileSize : 10,
         context = canvas.getContext('2d');
 
-    // Define the canvas object interface
+    // Define the canvas object interface 
     var properties = {
         grid: {
             value: {  
