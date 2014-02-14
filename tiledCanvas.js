@@ -38,23 +38,28 @@ function tiledCanvas(canvas, tileSize) {
                 },
                 draw: function () {
                     var tileSize = canvas.grid.tileSize,
-                        top = canvas.grid.offset.top,
-                        left = canvas.grid.offset.left;
+                        offsetTop = canvas.grid.offset.top,
+                        offsetLeft = canvas.grid.offset.left,
+                        top = Math.floor(offsetTop/tileSize),
+                        left = Math.floor(offsetLeft/tileSize),
+                        bottom = Math.floor((offsetTop + canvas.height)/tileSize),
+                        right = Math.floor((offsetLeft + canvas.width)/tileSize);
+
                     context.lineWidth = 1;
                     context.strokeStyle = '#ccc';
-                    for (var i = 0, y = i * tileSize + 0.5, rows = canvas.grid.rows; 
-                        i <= rows; i++, y = i * tileSize + 0.5) {
+                    for (var i = top, y = i * tileSize - offsetTop + 0.5; 
+                        i <= bottom; i++, y = i * tileSize - offsetTop + 0.5) {
                         // Draw horizontal lines
                         context.beginPath();
-                        context.moveTo(0, y - top);
-                        context.lineTo(canvas.width, y - top);
+                        context.moveTo(0, y);
+                        context.lineTo(canvas.width, y);
                         context.stroke();
-                        for (var j = 0, x = j * tileSize + 0.5, columns = canvas.grid.columns; 
-                            j <= columns; j++, x = j * tileSize + 0.5) {
+                        for (var j = left, x = j * tileSize - offsetLeft + 0.5; 
+                             j <= right; j++, x = j * tileSize - offsetLeft + 0.5) {
                             // Draw vertical lines
                             context.beginPath();
-                            context.moveTo(x - left, 0);
-                            context.lineTo(x - left, canvas.height);
+                            context.moveTo(x, 0);
+                            context.lineTo(x, canvas.height);
                             context.stroke();
                         }
                     }
@@ -65,9 +70,9 @@ function tiledCanvas(canvas, tileSize) {
                         offsetLeft = canvas.grid.offset.left,
                         x = column * tileSize - offsetLeft + 1,
                         y = row * tileSize - offsetTop + 1;
-                        
+
                     if (x + tileSize >= 0 && x <= canvas.width &&
-                        y + tileSize >=0 && y <= canvas.height) {
+                        y + tileSize >= 0 && y <= canvas.height) {
                         context.fillStyle = color || '#ccc';
                         context.beginPath();
                         context.fillRect(x, y, tileSize - 1, tileSize - 1);
@@ -83,6 +88,7 @@ function tiledCanvas(canvas, tileSize) {
                 setSize: function (newWidth, newHeight) {
                     var width = newWidth || window.innerWidth,
                         height = newHeight || window.innerHeight;
+
                     canvas.grid.right = canvas.grid.left + width;
                     canvas.grid.bottom = canvas.grid.top + height;
                     canvas.grid.rows = Math.floor(height/canvas.grid.tileSize);
