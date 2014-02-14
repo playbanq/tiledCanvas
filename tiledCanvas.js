@@ -65,6 +65,7 @@ function tiledCanvas(canvas, tileSize) {
                         offsetLeft = canvas.grid.offset.left,
                         x = column * tileSize - offsetLeft + 1,
                         y = row * tileSize - offsetTop + 1;
+                        
                     if (x + tileSize >= 0 && x <= canvas.width &&
                         y + tileSize >=0 && y <= canvas.height) {
                         context.fillStyle = color || '#ccc';
