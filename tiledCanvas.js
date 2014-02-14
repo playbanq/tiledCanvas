@@ -60,13 +60,16 @@ function tiledCanvas(canvas, tileSize) {
                     }
                 },
                 drawTile: function (row, column, color) {
-                    if (row <= canvas.grid.rows && column <= canvas.grid.columns) {
-                        var tileSize = canvas.grid.tileSize,
-                            top = canvas.grid.offset.top,
-                            left = canvas.grid.offset.left;
+                    var tileSize = canvas.grid.tileSize,
+                        offsetTop = canvas.grid.offset.top,
+                        offsetLeft = canvas.grid.offset.left,
+                        x = column * tileSize - offsetLeft + 1,
+                        y = row * tileSize - offsetTop + 1;
+                    if (x + tileSize >= 0 && x <= canvas.width &&
+                        y + tileSize >=0 && y <= canvas.height) {
                         context.fillStyle = color || '#ccc';
                         context.beginPath();
-                        context.fillRect(column * tileSize - left + 1, row * tileSize - top + 1, tileSize - 1, tileSize - 1);
+                        context.fillRect(x, y, tileSize - 1, tileSize - 1);
                         context.stroke();
                     }
                 },
