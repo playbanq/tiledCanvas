@@ -18,7 +18,7 @@ function tiledCanvas(canvas, tileSize) {
 
     // Check what parameters were specified, or used the default values
     tileSize = tileSize || canvas.tileSize;
-    var tileSize = (typeof tileSize === 'number') ? tileSize : 10,
+    var tileSize = (typeof tileSize === 'number') ? tileSize : 1,
         context = canvas.getContext('2d');
 
     // Define the canvas object interface 
@@ -28,33 +28,41 @@ function tiledCanvas(canvas, tileSize) {
                 tileSize: tileSize,
                 rows: Math.floor(canvas.height/tileSize),
                 columns: Math.floor(canvas.width/tileSize),
+                offset: {
+                    top: 0,
+                    left: 0,
+                },
                 draw: function () {
-                    var tileSize = canvas.grid.tileSize; 
+                    var tileSize = canvas.grid.tileSize,
+                        top = canvas.grid.offset.top,
+                        left = canvas.grid.offset.left;
                     context.lineWidth = 1;
                     context.strokeStyle = '#ccc';
                     for (var i = 0, y = i * tileSize + 0.5, rows = canvas.grid.rows; 
                         i <= rows; i++, y = i * tileSize + 0.5) {
                         // Draw horizontal lines
                         context.beginPath();
-                        context.moveTo(0, y);
-                        context.lineTo(canvas.width, y);
+                        context.moveTo(0, y - top);
+                        context.lineTo(canvas.width, y - top);
                         context.stroke();
                         for (var j = 0, x = j * tileSize + 0.5, columns = canvas.grid.columns; 
                             j <= columns; j++, x = j * tileSize + 0.5) {
                             // Draw vertical lines
                             context.beginPath();
-                            context.moveTo(x, 0);
-                            context.lineTo(x, canvas.height);
+                            context.moveTo(x - left, 0);
+                            context.lineTo(x - left, canvas.height);
                             context.stroke();
                         }
                     }
                 },
                 drawTile: function (row, column, color) {
                     if (row <= canvas.grid.rows && column <= canvas.grid.columns) {
-                        var tileSize = canvas.grid.tileSize;
+                        var tileSize = canvas.grid.tileSize,
+                            top = canvas.grid.offset.top,
+                            left = canvas.grid.offset.left;
                         context.fillStyle = color || '#ccc';
                         context.beginPath();
-                        context.fillRect(column * tileSize + 1, row * tileSize + 1, tileSize - 1, tileSize - 1);
+                        context.fillRect(column * tileSize - left + 1, row * tileSize - top + 1, tileSize - 1, tileSize - 1);
                         context.stroke();
                     }
                 },
