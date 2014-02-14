@@ -77,10 +77,12 @@ function tiledCanvas(canvas, tileSize) {
                     };
                 },
                 setSize: function (newWidth, newHeight) {
-                    canvas.grid.right = canvas.grid.left + newWidth;
-                    canvas.grid.bottom = canvas.grid.top + newHeight;
-                    canvas.grid.rows = Math.floor((newHeight || window.innerWidth)/canvas.grid.tileSize);
-                    canvas.grid.columns = Math.floor((newWidth || window.innerWidth)/canvas.grid.tileSize);
+                    var width = newWidth || window.innerWidth,
+                        height = newHeight || window.innerHeight;
+                    canvas.grid.right = canvas.grid.left + width;
+                    canvas.grid.bottom = canvas.grid.top + height;
+                    canvas.grid.rows = Math.floor(height/canvas.grid.tileSize);
+                    canvas.grid.columns = Math.floor(width/canvas.grid.tileSize);
                 }
             }
         },
