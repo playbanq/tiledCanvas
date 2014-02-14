@@ -28,7 +28,8 @@ function tiledCanvas(canvas, tileSize) {
                 tileSize: tileSize,
                 rows: Math.floor(canvas.height/tileSize),
                 columns: Math.floor(canvas.width/tileSize),
-                draw: function () { 
+                draw: function () {
+                    var tileSize = canvas.grid.tileSize; 
                     context.lineWidth = 1;
                     context.strokeStyle = '#ccc';
                     for (var i = 0, y = i * tileSize + 0.5, rows = canvas.grid.rows; 
