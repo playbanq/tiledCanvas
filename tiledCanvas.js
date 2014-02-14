@@ -28,6 +28,10 @@ function tiledCanvas(canvas, tileSize) {
                 tileSize: tileSize,
                 rows: Math.floor(canvas.height/tileSize),
                 columns: Math.floor(canvas.width/tileSize),
+                top: 0,
+                left: 0,
+                right: canvas.width,
+                bottom: canvas.height,
                 offset: {
                     top: 0,
                     left: 0,
@@ -73,6 +77,8 @@ function tiledCanvas(canvas, tileSize) {
                     };
                 },
                 setSize: function (newWidth, newHeight) {
+                    canvas.grid.right = canvas.grid.left + newWidth;
+                    canvas.grid.bottom = canvas.grid.top + newHeight;
                     canvas.grid.rows = Math.floor((newHeight || window.innerWidth)/canvas.grid.tileSize);
                     canvas.grid.columns = Math.floor((newWidth || window.innerWidth)/canvas.grid.tileSize);
                 }
