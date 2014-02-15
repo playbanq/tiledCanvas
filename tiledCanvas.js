@@ -37,6 +37,14 @@ function tiledCanvas(canvas, tileSize) {
                     left: 0,
                 },
                 draw: function () {
+                    var zoom = 1;
+                    if (canvas.zoom) {
+                        zoom = canvas.zoom.scale;
+                        if (typeof zoom !== 'number' || isNaN(zoom)) {
+                            zoom = 1;
+                        }
+                    };
+
                     var tileSize = canvas.grid.tileSize,
                         offsetTop = canvas.grid.offset.top,
                         offsetLeft = canvas.grid.offset.left,
@@ -47,15 +55,15 @@ function tiledCanvas(canvas, tileSize) {
 
                     context.lineWidth = 1;
                     context.strokeStyle = '#ccc';
-                    for (var i = top, y = i * tileSize - offsetTop + 0.5; 
-                        i <= bottom; i++, y = i * tileSize - offsetTop + 0.5) {
+                    for (var i = top, y = Math.ceil((i * tileSize - offsetTop) * zoom) + 0.5; 
+                        i <= bottom; i++, y = Math.ceil((i * tileSize - offsetTop) * zoom) + 0.5) {
                         // Draw horizontal lines
                         context.beginPath();
                         context.moveTo(0, y);
                         context.lineTo(canvas.width, y);
                         context.stroke();
-                        for (var j = left, x = j * tileSize - offsetLeft + 0.5; 
-                             j <= right; j++, x = j * tileSize - offsetLeft + 0.5) {
+                        for (var j = left, x = Math.ceil((j * tileSize - offsetLeft) * zoom) + 0.5; 
+                             j <= right; j++, x = Math.ceil((j * tileSize - offsetLeft) * zoom) + 0.5) {
                             // Draw vertical lines
                             context.beginPath();
                             context.moveTo(x, 0);
@@ -65,17 +73,25 @@ function tiledCanvas(canvas, tileSize) {
                     }
                 },
                 drawTile: function (row, column, color) {
+                    var zoom = 1;
+                    if (canvas.zoom) {
+                        zoom = canvas.zoom.scale;
+                        if (typeof zoom !== 'number' || isNaN(zoom)) {
+                            zoom = 1;
+                        }
+                    };
+
                     var tileSize = canvas.grid.tileSize,
                         offsetTop = canvas.grid.offset.top,
                         offsetLeft = canvas.grid.offset.left,
-                        x = column * tileSize - offsetLeft + 1,
-                        y = row * tileSize - offsetTop + 1;
+                        x = Math.ceil((column * tileSize - offsetLeft) * zoom) + 1,
+                        y = Math.ceil((row * tileSize - offsetTop) * zoom) + 1;
 
                     if (x + tileSize >= 0 && x <= canvas.width &&
                         y + tileSize >= 0 && y <= canvas.height) {
                         context.fillStyle = color || '#ccc';
                         context.beginPath();
-                        context.fillRect(x, y, tileSize - 1, tileSize - 1);
+                        context.fillRect(x, y, Math.ceil(tileSize * zoom) - 1, Math.ceil(tileSize * zoom) - 1);
                         context.stroke();
                     }
                 },
